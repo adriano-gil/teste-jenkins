@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh 'echo "Executando o comando Docker Push!"'
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                    docker.withRegistry('dockerhub') {
                         dockerapp.push()
                     }
                 }
