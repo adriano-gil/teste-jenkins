@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sh 'echo "Executando o comando Docker Build!"'
                 script {
-                    dockerapp = docker.build("adrianoagiljr/guia-jenkins:${env.BUILD_ID}", '-f ./src/Dockerfile ./src')
+                    dockerapp = docker.build("adrianoagiljr/teste:${env.BUILD_ID}", '-f ./src/Dockerfile ./src')
                 }
             }
         }
@@ -16,6 +16,7 @@ pipeline {
                 sh 'echo "Executando o comando Docker Push!"'
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        dockerapp.push('latest')
                         dockerapp.push("${env.BUILD_ID}")
                     }
                 }
@@ -30,7 +31,7 @@ pipeline {
                 sh 'echo "Executando o comando Kubectl Apply!"'
 
                 withKubeConfig([credentialsId: 'kubeconfig']){
-                    sh 'sed -i "s/{{tag}}/tag_version/g" ./k8s/deployment.yaml'
+                    sh 'sed -i "s/{{tag}}/$tag_version/g" ./k8s/deployment.yaml'
                     sh 'kubectl apply -f k8s/deployment.yaml'
                 }
             }

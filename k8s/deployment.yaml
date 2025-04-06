@@ -1,32 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: conversao-temperatura
+  name: teste
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: conversao-temperatura
+      app: teste
   template:
     metadata:
       labels:
-        app: conversao-temperatura
+        app: teste
     spec:
       containers:
-      - name: conversao-temperatura
-        image: adrianoagiljr/guia-jenkins:{{tag}}
+      - name: teste
+        image: adrianoagiljr/teste:{{tag}}
         ports:
         - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: conversao-temperatura
+  name: teste
 spec:
   selector:
-    app: conversao-temperatura
+    app: teste
   ports:
   - port: 80
+    protocol: TCP
     targetPort: 8080
-  type: LoadBalancer
+  type: NodePort
 
